@@ -1122,10 +1122,13 @@ local function SetHooks()
 			ChatEdit_InsertLink("["..gsub(questName, " *(.*)", "%1").." ("..block.id..")]")
 		elseif ( mouseButton ~= "RightButton" ) then
 			MSA_CloseDropDownMenus();
+
 			if ( IsModifiedClick("QUESTWATCHTOGGLE") ) then
 				QuestObjectiveTracker_UntrackQuest(nil, block.id);
 			elseif IsModifiedClick(db.menuWowheadURLModifier) then
 				KT:ShowPopup("quest", block.id)
+			elseif IsControlKeyDown() and KT.AddonQuestie.isLoaded then
+				KT.AddonQuestie:SetTomTomTarget(block.id)
 			else
 				QuestObjectiveTracker_OpenQuestDetails(nil, block.id)
 			end
@@ -1738,7 +1741,10 @@ function KT:OnEnable()
 
 	self.QuestLog:Enable()
 	self.Filters:Enable()
-	if self.AddonQuestie.isLoaded then self.AddonQuestie:Enable() end
+	if self.AddonQuestie.isLoaded then
+		self.AddonQuestie:Enable()
+		self.Filters.customSorter = self.AddonQuestie.sorter
+	end
 	self.AddonOthers:Enable()
 	self.Help:Enable()
 

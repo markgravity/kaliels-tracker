@@ -42,6 +42,9 @@
 							<Alpha startDelay="0.067" fromAlpha="0" toAlpha="1" duration="0.1" order="1"/>
 							<Alpha startDelay="0.467" endDelay="0" fromAlpha="1" toAlpha="0" duration="0.267" order="1"/>
 							<Scripts>
+								<OnPlay>
+									PlaySoundFile("Interface\\AddOns\\!KalielsTracker\\Media\\UI_QuesTrollingForward_01.ogg", "Master")
+								</OnPlay>
 								<OnFinished>
 									local line = self:GetParent():GetParent();
 									QuestObjectiveTracker_FinishGlowAnim(line);
@@ -79,7 +82,7 @@
 			</AnimationGroup>
 		</Animations>
 	</Frame>
-	
+
 	<Frame name="QuestObjectiveWaypointLineTemplate" inherits="ObjectiveTrackerLineTemplate" virtual="true">
 		<Size x="200" y="0"/>
 		<Layers>

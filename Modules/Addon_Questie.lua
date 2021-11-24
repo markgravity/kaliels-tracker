@@ -33,7 +33,16 @@ local function GetQuestieData()
         QuestieDB = QuestieLoader:ImportModule("QuestieDB")
         ZoneDB = QuestieLoader:ImportModule("ZoneDB")
         QuestieMap = QuestieLoader:ImportModule("QuestieMap")
+
         QuestieTracker = QuestieLoader:ImportModule("QuestieTracker")
+        local questieUpdate = QuestieTracker.Update
+        function QuestieTracker:Update()
+          questieUpdate(QuestieTracker)
+          if QuestieTracker.private.baseFrame ~= nil then
+            QuestieTracker.private.baseFrame:Hide()
+          end
+          ObjectiveTracker_Update(OBJECTIVE_TRACKER_UPDATE_MODULE_QUEST)
+        end
 
         initTicker = C_Timer.NewTicker(0.5, function()
             if Questie.started then
@@ -285,7 +294,32 @@ end
 function M:OnInitialize()
     _DBG("|cffffff00Init|r - "..self:GetName(), true)
     db = KT.db.profile
-    self.isLoaded = (KT:CheckAddOn("Questie", "6.3.14") and db.addonQuestie)
+    self.isLoaded = (KT:CheckAddOn("Questie", "6.6.2") and db.addonQuestie)
+    self.sorter = {
+      id = "questie",
+      name = "by Questie",
+      func = function(a, b)
+        if QuestieTracker._order == nil then
+          local aZone, bZone = KT_GetQuestListInfo(a[1], true).zone, KT_GetQuestListInfo(b[1], true).zone
+          if aZone == bZone then
+            return a[2] < b[2]
+          end
+          return aZone < bZone
+        end
+
+        for index, questID in pairs(QuestieTracker._order) do
+            if a[1] == questID then
+              return true
+            end
+
+            if b[1] == questID then
+              return false
+            end
+        end
+
+        return false
+      end
+    }
 end
 
 function M:OnEnable()
@@ -317,10 +351,7 @@ function M:CreateMenu(info, questID)
     if IsAddOnLoaded("TomTom") then
         info.text = "Set |cff33ff99TomTom|r Waypoint"
         info.func = function()
-            local spawn, zone, name = QuestieMap:GetNearestQuestSpawn(quest)
-            if spawn then
-                QuestieTracker.utils:SetTomTomTarget(name, zone, spawn[1], spawn[2])
-            end
+            M:SetTomTomTarget(quest.Id)
         end
         MSA_DropDownMenu_AddButton(info, MSA_DROPDOWN_MENU_LEVEL)
     end
@@ -329,4 +360,14 @@ end
 function M:GetQuestZones(questID)
     if not self.isLoaded or not isQuestieDBLoaded then return {} end
     return GetQuestZones(questID)
+end
+
+function M:SetTomTomTarget(questID)
+  if not IsAddOnLoaded("TomTom") then return end
+
+  local quest = QuestieDB:GetQuest(questID)
+  local spawn, zone, name = QuestieMap:GetNearestQuestSpawn(quest)
+  if spawn then
+      QuestieTracker.utils:SetTomTomTarget(name, zone, spawn[1], spawn[2])
+  end
 end

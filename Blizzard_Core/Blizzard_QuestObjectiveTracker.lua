@@ -358,7 +358,6 @@ function QUEST_TRACKER_MODULE:Update()
 
 	local playerMoney = GetMoney();
 	local watchMoney = false;
-
 	EnumQuestWatchData(
 		function(questWatchInfoTable)
 			local questID, level, title, questLogIndex, numObjectives, requiredMoney, isComplete, startEvent, isAutoComplete, failureTime, timeElapsed, questType, isTask, isBounty, isStory, isOnMap, hasLocalPOI, isHidden, isWarCampaign, hasOverrideSort = unpack(questWatchInfoTable);
@@ -367,7 +366,7 @@ function QUEST_TRACKER_MODULE:Update()
 			if ( isTask or ( isBounty and not IsQuestComplete(questID) ) ) then
 				showQuest = false;
 			end
-				
+
 			if ( showQuest ) then
 				local isSequenced = false;
 				local existingBlock = QUEST_TRACKER_MODULE:GetExistingBlock(questID);
@@ -418,7 +417,7 @@ function QUEST_TRACKER_MODULE:Update()
 						local text = GetMoneyString(playerMoney).." / "..GetMoneyString(requiredMoney);
 						QUEST_TRACKER_MODULE:AddObjective(block, "Money", text);
 					end
-					
+
 					-- timer bar
 					if ( failureTime and block.currentLine ) then
 						local currentLine = block.currentLine;

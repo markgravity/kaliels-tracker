@@ -73,7 +73,7 @@ local function SetHooks()
 			bck_QuestObjectiveTracker_UntrackQuest(dropDownButton, questID)
 		end
 	end
-	
+
 	local bck_QuestMapQuestOptions_TrackQuest = QuestMapQuestOptions_TrackQuest
 	QuestMapQuestOptions_TrackQuest = function(questID)
 		if not db.filterAuto[1] then
@@ -421,6 +421,13 @@ function DropDown_Initialize(self, level)
 			info.checked = (dbChar.sort == info.arg1)
 			MSA_DropDownMenu_AddButton(info, level)
 
+			if M.customSorter ~= nil then
+				info.text = M.customSorter.name
+				info.arg1 = M.customSorter.id
+				info.checked = (dbChar.sort == info.arg1)
+				MSA_DropDownMenu_AddButton(info, level)
+			end
+
 			MSA_DropDownMenu_AddSeparator(info, level)
 			info.notCheckable = false
 			info.func = function(_, arg)
@@ -487,7 +494,7 @@ local function SetFrames()
 	button:SetFrameLevel(KTF:GetFrameLevel() + 10)
 	button:SetNormalTexture(mediaPath.."UI-KT-HeaderButtons")
 	button:GetNormalTexture():SetTexCoord(0.5, 1, 0.5, 0.75)
-	
+
 	button:RegisterForClicks("AnyDown")
 	button:SetScript("OnClick", function(self, btn)
 		DropDown_Toggle()
@@ -578,6 +585,9 @@ function M:QuestSort(questWatchInfoList)
 			end
 			return a[2] > b[2]
 		end)
+	elseif self.customSorter ~= nil and dbChar.sort == self.customSorter.id then
+		-- by Custom
+		tsort(questWatchInfoList, self.customSorter.func)
 	end
 
 	if dbChar.sortCompleted == "top" then
