@@ -520,11 +520,11 @@ local function SetHooks()
 		KT:SetSize()
 
 		-- Set tracking indicator
-		if KT_GetNumQuestWatches() > 0 then
-			QuestLogTrackTracking:SetVertexColor(0, 1.0, 0)
-		else
-			QuestLogTrackTracking:SetVertexColor(1.0, 0, 0)
-		end
+		-- if KT_GetNumQuestWatches() > 0 then
+		-- 	QuestLogTrackTracking:SetVertexColor(0, 1.0, 0)
+		-- else
+		-- 	QuestLogTrackTracking:SetVertexColor(1.0, 0, 0)
+		-- end
 	end
 
 	function DEFAULT_OBJECTIVE_TRACKER_MODULE:AddObjective(block, objectiveKey, text, lineType, useFullHeight, dashStyle, colorStyle, adjustForNoText, overrideHeight)  -- RO
@@ -1706,8 +1706,8 @@ function KT:OnInitialize()
 	ResetIncompatibleData("0.1.2")
 
 	-- Blizzard frame resets
-	QuestWatchFrame:Hide()
-	QuestWatchFrame.Show = function() end
+	-- QuestWatchFrame:Hide()
+	-- QuestWatchFrame.Show = function() end
 	OTF.IsUserPlaced = function() return true end
 	OTF.KTSetParent = OTF.SetParent
 	OTF.SetParent = function() end

@@ -47,7 +47,7 @@ end
 local function SetHooks()
 	-- Quest Log -------------------------------------------------------------------------------------------------------
 
-	QuestLogCollapseAllButton:Hide()
+	-- QuestLogCollapseAllButton:Hide()
 	QuestLogCollapseAllButton_OnClick = function() end
 
 	function QuestLogTitleButton_OnClick(self, button)  -- R
@@ -142,7 +142,7 @@ function M:OnEnable()
 		local questIndex = GetQuestIndexForWatch(i)
 		RemoveQuestWatch(questIndex)
 	end
-	QuestWatch_Update()
+	-- QuestWatch_Update()
 
 	SetHooks()
 end

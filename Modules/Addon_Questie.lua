@@ -23,6 +23,7 @@ local db
 local QuestieDB, ZoneDB, QuestieMap, QuestieTracker
 local isQuestieDBLoaded = false
 local initTicker
+local TrackerUtils = QuestieLoader:ImportModule("TrackerUtils")
 
 --------------
 -- Internal --
@@ -368,6 +369,6 @@ function M:SetTomTomTarget(questID)
   local quest = QuestieDB:GetQuest(questID)
   local spawn, zone, name = QuestieMap:GetNearestQuestSpawn(quest)
   if spawn then
-      QuestieTracker.utils:SetTomTomTarget(name, zone, spawn[1], spawn[2])
+      TrackerUtils:SetTomTomTarget(name, zone, spawn[1], spawn[2])
   end
 end
